@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  name VARCHAR(63),
+  password_hash VARCHAR(64) NOT NULL,
+  password_salt VARCHAR(24) NOT NULL,
+  is_admin BOOLEAN DEFAULT 0
+);
