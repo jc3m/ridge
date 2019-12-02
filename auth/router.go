@@ -8,25 +8,40 @@ import (
   "github.com/gorilla/mux"
 )
 
+type userRequest struct {
+  Email string;
+  Password string;
+}
+
 func AuthRouter(s *mux.Router) {
   s.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "auth")
   })
 
-  s.HandleFunc("/createadmin", func(w http.ResponseWriter, r *http.Request) {
-    type createAdminRequest struct {
-      Email string;
-      Password string;
-    }
-
-    var t createAdminRequest
-    err := json.NewDecoder(r.Body).Decode(&t)
+  s.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+    var u userRequest
+    err := json.NewDecoder(r.Body).Decode(&u)
     if err != nil {
       w.WriteHeader(http.StatusBadRequest)
       return;
     }
 
-    err = CreateInitialAdmin(t.Email, t.Password)
+    if !authenticate(u.Email, u.Password) {
+      w.WriteHeader(http.StatusUnauthorized)
+      return;
+    }
+    // TODO: Create and return a session
+  }).Methods("POST")
+
+  s.HandleFunc("/createadmin", func(w http.ResponseWriter, r *http.Request) {
+    var u userRequest
+    err := json.NewDecoder(r.Body).Decode(&u)
+    if err != nil {
+      w.WriteHeader(http.StatusBadRequest)
+      return;
+    }
+
+    err = CreateInitialAdmin(u.Email, u.Password)
     if err != nil {
       w.WriteHeader(http.StatusForbidden)
       fmt.Fprintf(w, err.Error())
