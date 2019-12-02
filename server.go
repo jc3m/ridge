@@ -18,7 +18,7 @@ func main() {
   r := mux.NewRouter().StrictSlash(true)
   auth.AuthRouter(r.PathPrefix("/auth").Subrouter())
 
-  r.Use(handlers.RecoveryHandler())
+  r.Use(handlers.RecoveryHandler(handlers.PrintRecoveryStack(true)))
 
   // TODO: Restrict to https
   http.Handle("/", r)

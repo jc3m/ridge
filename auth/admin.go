@@ -1,32 +1,10 @@
 package auth
 
 import (
-  "crypto/sha256"
-  "crypto/rand"
-  "encoding/hex"
   "errors"
 
   "github.com/jc3m/ridge/database"
 )
-
-// TODO: Move these to a crypto specific file
-
-/**
- * Generates a 24 character random salt
- */
-func genSalt() string {
-  b := make([]byte, 12)
-  _, err := rand.Read(b)
-  if err != nil {
-    panic(err)
-  }
-  return hex.EncodeToString(b)
-}
-
-func genHash(password string, salt string) string {
-  var sum [32]byte = sha256.Sum256([]byte(password + salt))
-  return hex.EncodeToString(sum[:])
-}
 
 func CreateInitialAdmin(email string, password string) error {
   // TODO: Validate email and password
@@ -48,7 +26,7 @@ func CreateInitialAdmin(email string, password string) error {
   }
 
   stmt, err := db.Prepare(
-    "INSERT INTO users(email, password_hash, password_salt, is_admin) VALUES( ?, ?, ?, ? )")
+    "INSERT INTO users(email, password_hash, password_salt, is_admin) VALUES(?, ?, ?, ?)")
 	if err != nil {
     panic(err)
 	}
