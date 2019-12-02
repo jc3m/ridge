@@ -14,13 +14,13 @@ import (
 /**
  * Generates a 24 character random salt
  */
-func genSalt() (string, error) {
+func genSalt() string {
   b := make([]byte, 12)
   _, err := rand.Read(b)
   if err != nil {
-    return "", err
+    panic(err)
   }
-  return hex.EncodeToString(b), nil
+  return hex.EncodeToString(b)
 }
 
 func genHash(password string, salt string) string {
@@ -54,10 +54,7 @@ func CreateInitialAdmin(email string, password string) error {
 	}
   defer stmt.Close()
   
-  salt, err := genSalt()
-  if err != nil {
-    panic(err)
-  }
+  salt := genSalt()
   hash := genHash(password, salt)
   _, err = stmt.Exec(email, hash, salt, 1)
   if err != nil {
