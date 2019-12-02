@@ -4,6 +4,7 @@ import (
   "log"
   "net/http"
 
+  "github.com/gorilla/handlers"
   "github.com/gorilla/mux"
   "github.com/joho/godotenv"
 
@@ -16,6 +17,8 @@ func main() {
 
   r := mux.NewRouter().StrictSlash(true)
   auth.AuthRouter(r.PathPrefix("/auth").Subrouter())
+
+  r.Use(handlers.RecoveryHandler())
 
   // TODO: Restrict to https
   http.Handle("/", r)
