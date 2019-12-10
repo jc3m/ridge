@@ -1,6 +1,8 @@
 package main
 
 import (
+  "flag"
+  "fmt"
   "log"
   "net/http"
 
@@ -10,6 +12,8 @@ import (
 
   "github.com/jc3m/ridge/auth"
 )
+
+var port = flag.Int("port", 8080, "port to listen for requests")
 
 func main() {
   // Loads from .env file. Fails silently if .env doesn't exist
@@ -22,6 +26,7 @@ func main() {
 
   // TODO: Restrict to https
   http.Handle("/", r)
-  // TODO: Read port from flag
-  log.Fatal(http.ListenAndServe(":8080", nil))
+
+  log.Printf("Listening on port %d\n", *port)
+  log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
 }

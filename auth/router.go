@@ -41,7 +41,7 @@ func AuthRouter(s *mux.Router) {
       return;
     }
 
-    err = CreateInitialAdmin(u.Email, u.Password)
+    err = createInitialAdmin(u.Email, u.Password)
     if err != nil {
       w.WriteHeader(http.StatusForbidden)
       fmt.Fprintf(w, err.Error())

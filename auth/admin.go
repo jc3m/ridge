@@ -6,7 +6,7 @@ import (
   "github.com/jc3m/ridge/database"
 )
 
-func CreateInitialAdmin(email string, password string) error {
+func createInitialAdmin(email string, password string) error {
   // TODO: Validate email and password
   db, err := database.Connect()
   if err != nil {
@@ -31,7 +31,7 @@ func CreateInitialAdmin(email string, password string) error {
     panic(err)
 	}
   defer stmt.Close()
-  
+
   salt := genSalt()
   hash := genHash(password, salt)
   _, err = stmt.Exec(email, hash, salt, 1)

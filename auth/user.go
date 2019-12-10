@@ -22,15 +22,14 @@ func authenticate(email string, password string) bool {
   if err != nil {
     panic(err)
   }
-  if rows.Next() {
-    var salt, hash string
-    err = rows.Scan(&salt, &hash)
-    if err != nil {
-      panic(err)
-    }
-
-    // TODO: Return session info instead?
-    return hash == genHash(password, salt)
+  if !rows.Next() {
+    return false;
   }
-  return false
+  var salt, hash string
+  err = rows.Scan(&salt, &hash)
+  if err != nil {
+    panic(err)
+  }
+  // Check password
+  return hash == genHash(password, salt)
 }
