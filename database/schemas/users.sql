@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS users (
   name VARCHAR(63),
   password_hash VARCHAR(64) NOT NULL,
   password_salt VARCHAR(24) NOT NULL,
-  is_admin BOOLEAN DEFAULT 0,
+  is_admin BOOLEAN DEFAULT 0
 );

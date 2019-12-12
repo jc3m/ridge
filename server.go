@@ -7,10 +7,9 @@ import (
   "net/http"
 
   "github.com/gorilla/handlers"
-  "github.com/gorilla/mux"
   "github.com/joho/godotenv"
 
-  "github.com/jc3m/ridge/auth"
+  "github.com/jc3m/ridge/api"
 )
 
 var port = flag.Int("port", 8080, "port to listen for requests")
@@ -19,9 +18,7 @@ func main() {
   // Loads from .env file. Fails silently if .env doesn't exist
   godotenv.Load()
 
-  r := mux.NewRouter().StrictSlash(true)
-  auth.AuthRouter(r.PathPrefix("/auth").Subrouter())
-
+  r := api.Router()
   r.Use(handlers.RecoveryHandler(handlers.PrintRecoveryStack(true)))
 
   // TODO: Restrict to https
